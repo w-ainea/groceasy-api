@@ -2,21 +2,23 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const routes = require("./routes");
 const cors = require("cors");
-const db = require("../db-config");
+// const db = require("../db-config");
+// const authConfig = require("./actions/auth");
+const jwtCheck = require("./actions/auth");
+require("dotenv").config();
 
-// constants
 const app = express();
-const port = 8000;
-
-// console.log(db);
+const port = process.env.API_PORT;
+const appOrigin = process.env.APP_ORIGIN;
 
 // moddlewares
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cors());
+app.use(cors({ origin: appOrigin }));
 
 // mount routes
 app.use(routes);
+app.use(jwtCheck);
 
 app.use((err, req, res, next) => {
   if (err.name === "UnauthorizedError") {
@@ -25,6 +27,6 @@ app.use((err, req, res, next) => {
   } else next();
 });
 
-app.listen(process.env.PORT || port, () => {
-  console.log(`App listening on port: ${process.env.PORT || port}`);
+app.listen(port, () => {
+  console.log(`App listening on port: ${port}`);
 });
