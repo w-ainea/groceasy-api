@@ -12,4 +12,8 @@ app.use("/checkout", require("./checkout"));
 app.use("/products", require("./products"));
 app.use("/auth", require("./auth"));
 
+app.all('*', (req, res)=>{
+  res.status(400).send({message: 'not found'})
+})
+
 module.exports = app;

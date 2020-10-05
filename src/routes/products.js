@@ -1,15 +1,16 @@
 const express = require("express");
 const db = require("../../db-config.js");
+const { getProducts } = require("../actions/products.js");
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
-  try {
-    const products = await db;
-    res.status(200).json(products);
-  } catch (err) {
-    res.status(500).json({ message: "problem getting products" });
-  }
+router.get("/list", (req, res) => {
+  return getProducts()
+    .then((products) => res.json(products))
+    .catch((err) => console.log(err));
+  // res.send("products endpoint");
 });
+
+router.post("/products", (req, res) => {});
 
 module.exports = router;

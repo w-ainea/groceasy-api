@@ -1,13 +1,11 @@
-const express = require("express");
 const db = require("../../db-config.js");
 
-const router = express.Router();
+const getProducts = () => {
+  return db("products");
+};
 
-router.get("/", async (req, res) => {
-  try {
-    const products = await db("products");
-    res.status(200).json(products);
-  } catch (err) {
-    res.status(500).json({ message: "problem getting products" });
-  }
-});
+const updateProducts = () => {};
+
+const deleteProducts = () => {};
+
+module.exports = { getProducts, updateProducts, deleteProducts };
