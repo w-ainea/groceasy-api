@@ -2,8 +2,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const routes = require("./routes");
 const cors = require("cors");
-// const db = require("../db-config");
-// const authConfig = require("./actions/auth");
 const jwtCheck = require("./actions/auth");
 require("dotenv").config();
 
@@ -18,7 +16,7 @@ app.use(cors({ origin: appOrigin }));
 
 // mount routes
 app.use(routes);
-app.use(jwtCheck);
+// app.use(jwtCheck);
 
 app.use((err, req, res, next) => {
   if (err.name === "UnauthorizedError") {

@@ -1,16 +1,36 @@
 const express = require("express");
-const db = require("../../db-config.js");
-const { getProducts } = require("../actions/products.js");
+
+const {
+  getProducts,
+  addProduct,
+  updateProduct,
+} = require("../actions/products.js");
 
 const router = express.Router();
 
-router.get("/list", (req, res) => {
+// get the products
+router.get("/list", (req, res, next) => {
   return getProducts()
     .then((products) => res.json(products))
-    .catch((err) => console.log(err));
-  // res.send("products endpoint");
+    .catch((err) => next(err));
 });
 
-router.post("/products", (req, res) => {});
+// add products
+router.post("/add", (req, res, next) => {
+  addProduct(req.body)
+    .then((response) => {
+      res.json(response);
+    })
+    .catch((err) => {
+      next(err);
+    });
+});
+
+// update products
+router.put("/update", (req, res, next) => {
+  updateProduct(req.body)
+    .then((product) => res.json({ product }))
+    .catch((err) => next(err));
+});
 
 module.exports = router;
