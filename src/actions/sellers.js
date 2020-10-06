@@ -5,9 +5,13 @@ const getSellers = () => {
 };
 
 const addSeller = (seller) => {
-  return db("sellers").returning("*").insert({});
+  return db("sellers").returning("*").insert({
+    seller_name: seller.seller_name,
+  });
 };
 
-const deleteProduct = () => {};
+const getSellerById = (id) => {
+  return db("sellers").where({ id }).select("*");
+};
 
-module.exports = { getSellers, addSeller };
+module.exports = { getSellers, addSeller, getSellerById };

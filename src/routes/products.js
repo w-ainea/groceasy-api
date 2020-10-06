@@ -8,6 +8,10 @@ const {
 
 const router = express.Router();
 
+router.get("/", (req, res) => {
+  res.send("products endpoint");
+});
+
 // get the products
 router.get("/list", (req, res, next) => {
   return getProducts()
