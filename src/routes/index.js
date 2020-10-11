@@ -6,7 +6,7 @@ app.get("/", (req, res) => {
   res.send("App is up and running");
 });
 
-app.use("/admin", require("./dashboard"));
+app.use("/categories", require("./categories"));
 app.use("/account", require("./account"));
 app.use("/checkout", require("./checkout"));
 app.use("/products", require("./products"));
