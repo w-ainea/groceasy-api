@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const routes = require("./routes");
 const cors = require("cors");
 const jwtCheck = require("./actions/auth");
+const { authenticateApp } = require("./actions/checkout");
 require("dotenv").config();
 
 const app = express();
@@ -16,6 +17,7 @@ app.use(cors({ origin: appOrigin }));
 
 // mount routes
 app.use(routes);
+
 // app.use(jwtCheck);
 
 app.use((err, req, res, next) => {

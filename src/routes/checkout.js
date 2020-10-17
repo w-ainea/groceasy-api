@@ -1,56 +1,26 @@
 const express = require("express");
-const { auth } = require("express-openid-connect");
 
 const request = require("request");
 require("dotenv").config();
 
 const router = express.Router();
 
-const authenticate = (req, res, next) => {
-  const consumer_key = process.env.API_CONSUMER_KEY;
-  const consumer_secret = process.env.API_CONSUMER_SECRET;
-  let url =
-    "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials";
-  let auth =
-    "Basic " +
-    new Buffer.from(consumer_key + ":" + consumer_secret).toString("base64");
+const { access } = require("../actions/checkout");
 
-  request(
-    {
-      url,
-      headers: {
-        Authorization: "Basic" + auth,
-      },
-    },
-    (error, response, body) => {
-      // TODO: Use the body object to extract OAuth access token
-      if (error) {
-        res.send(error);
-      } else {
-        req.access_token = JSON.parse(body).access_token;
-
-        next;
-      }
-
-      res.status(200).json(body);
-    }
-  );
-};
-
-router.get("/stk", authenticate, (req, res) => {
+router.get("/stk", access, (req, res, next) => {
   let url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
     auth = "Bearer " + req.access_token,
     date = new Date(),
     timestamp =
       date.getFullYear() +
       "" +
-      "" +
+      "0" +
       date.getMonth() +
       "" +
       "" +
       date.getDate() +
       "" +
-      "" +
+      "0" +
       date.getHours() +
       "" +
       "" +
@@ -81,7 +51,7 @@ router.get("/stk", authenticate, (req, res) => {
         PartyA: "254715390163",
         PartyB: "174379",
         PhoneNumber: "254715390163",
-        CallBackURL: " https://192.168.0.107:8000/checkout/pay",
+        CallBackURL: "https://192.168.0.107:8000/checkout/pay",
         AccountReference: "Test",
         TransactionDesc: "TestPay",
       },
@@ -94,10 +64,6 @@ router.get("/stk", authenticate, (req, res) => {
       }
     }
   );
-});
-
-router.get("/auth", authenticate, (req, res) => {
-  res.status(200).json({ access_token: req.access_token });
 });
 
 router.post("/pay", (req, res) => {
