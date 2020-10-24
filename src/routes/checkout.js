@@ -5,9 +5,9 @@ require("dotenv").config();
 
 const router = express.Router();
 
-const { access } = require("../actions/checkout");
+const { authenticate } = require("../actions/checkout");
 
-router.get("/stk", access, (req, res, next) => {
+router.post("/stk", authenticate, (req, res, next) => {
   let url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
     auth = "Bearer " + req.access_token,
     date = new Date(),
@@ -47,11 +47,11 @@ router.get("/stk", access, (req, res, next) => {
         Password: password,
         Timestamp: timestamp,
         TransactionType: "CustomerPayBillOnline",
-        Amount: "1",
+        Amount: 1,
         PartyA: "254715390163",
         PartyB: "174379",
         PhoneNumber: "254715390163",
-        CallBackURL: "https://192.168.0.107:8000/checkout/pay",
+        CallBackURL: "https://192.168.0.107:8000/checkout/",
         AccountReference: "Test",
         TransactionDesc: "TestPay",
       },
@@ -61,14 +61,12 @@ router.get("/stk", access, (req, res, next) => {
         console.log(error);
       } else {
         res.status(200).json(body);
+        return body.CustomerMessage;
       }
     }
   );
-});
 
-router.post("/pay", (req, res) => {
-  console.log("-------STK-------");
-  console.log(body);
+  console.log(req.body);
 });
 
 module.exports = router;

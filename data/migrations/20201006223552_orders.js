@@ -1,5 +1,5 @@
 exports.up = async function (knex) {
-  await knex.schema.createTable("ordersTable", (table) => {
+  await knex.schema.createTable("orders", (table) => {
     table.increments("id").primary();
     table.json("products").notNullable();
     table.decimal("order_total").notNullable();

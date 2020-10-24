@@ -1,9 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const routes = require("./routes");
 const cors = require("cors");
-const jwtCheck = require("./actions/auth");
-const { authenticateApp } = require("./actions/checkout");
+
+const routes = require("./routes");
 require("dotenv").config();
 
 const app = express();
@@ -11,15 +10,18 @@ const port = process.env.API_PORT;
 const appOrigin = process.env.APP_ORIGIN;
 
 // moddlewares
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+let jsonParser = bodyParser.json();
+let urlencodedParser = bodyParser.urlencoded({ extended: true });
+
+app.use(jsonParser);
+app.use(urlencodedParser);
+
 app.use(cors({ origin: appOrigin }));
 
 // mount routes
 app.use(routes);
 
 // app.use(jwtCheck);
-
 app.use((err, req, res, next) => {
   if (err.name === "UnauthorizedError") {
     console.error("Request without valid token");
@@ -27,6 +29,7 @@ app.use((err, req, res, next) => {
   } else next();
 });
 
+// listen
 app.listen(port, () => {
   console.log(`App listening on port: ${port}`);
 });

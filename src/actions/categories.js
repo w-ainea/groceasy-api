@@ -6,7 +6,7 @@ const getCategories = () => {
 
 const addCategory = (category) => {
   return db("categories").returning("*").insert({
-    category_name: category.category_name,
+    name: category.name,
   });
 };
 

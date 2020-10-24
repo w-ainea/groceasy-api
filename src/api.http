@@ -1,0 +1,16 @@
+###
+GET  http://localhost:8000/products/list
+
+
+###
+GET http://localhost:8000/sellers/list
+
+###
+POST http://localhost:8000/checkout/stk
+
+
+Content-Type: application/json
+
+{
+  
+}

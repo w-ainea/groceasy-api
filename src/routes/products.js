@@ -1,4 +1,7 @@
 const express = require("express");
+const bodyParser = require("body-parser");
+
+const jsonParser = bodyParser.json();
 
 const {
   getProducts,
@@ -20,7 +23,7 @@ router.get("/list", (req, res, next) => {
 });
 
 // add products
-router.post("/add", (req, res, next) => {
+router.post("/add", jsonParser, (req, res, next) => {
   addProduct(req.body)
     .then((response) => {
       res.json(response);

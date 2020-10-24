@@ -9,7 +9,6 @@ const addProduct = (product) => {
     product_name: product.product_name,
     price: product.price,
     category: product.category,
-    seller_id: product.seller_id,
   });
 };
 
@@ -18,7 +17,6 @@ const updateProduct = (product) => {
     product_name: product.product_name,
     price: product.price,
     category: product.category,
-    seller_id: product.seller_id,
   });
 };
 

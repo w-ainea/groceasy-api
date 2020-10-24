@@ -3,7 +3,7 @@ module.exports = {
     client: "postgresql",
     connection: {
       database: "groceasy-db",
-      user: "ainea",
+      user: "",
       password: "",
     },
     pool: {
@@ -23,8 +23,8 @@ module.exports = {
     client: "postgresql",
     connection: {
       database: "groceasy-db",
-      user: "username",
-      password: "password",
+      user: "",
+      password: "",
     },
     pool: {
       min: 2,
