@@ -27,6 +27,7 @@ router.post("/add", jsonParser, (req, res, next) => {
   addProduct(req.body)
     .then((response) => {
       res.json(response);
+      console.log(req.body);
     })
     .catch((err) => {
       next(err);

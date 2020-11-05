@@ -3,6 +3,7 @@ exports.up = async function (knex) {
     table.increments("id").primary();
     table.string("product_name").notNullable();
     table.decimal("price", { precision: 0 }).notNullable();
+    table.decimal("quantity").notNullable();
     table.string("category").notNullable();
   });
 };
