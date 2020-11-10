@@ -1,3 +1,7 @@
 /node_modules
 
+# environmental variables
 .env
+
+# REST client
+/src/api.http

@@ -6,7 +6,7 @@ const routes = require("./routes");
 require("dotenv").config();
 
 const app = express();
-const port = process.env.API_PORT;
+const port = process.env.API_PORT || 7000;
 const appOrigin = process.env.APP_ORIGIN;
 
 // moddlewares

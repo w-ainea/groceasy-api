@@ -14,7 +14,7 @@ router.post("/stk", authenticate, (req, res, next) => {
     timestamp =
       date.getFullYear() +
       "" +
-      "0" +
+       ""+
       date.getMonth() +
       "" +
       "" +
@@ -28,6 +28,8 @@ router.post("/stk", authenticate, (req, res, next) => {
       "" +
       "" +
       date.getSeconds();
+
+      console.log(timestamp)
 
   const password = new Buffer.from(
     "174379" +
@@ -47,10 +49,10 @@ router.post("/stk", authenticate, (req, res, next) => {
         Password: password,
         Timestamp: timestamp,
         TransactionType: "CustomerPayBillOnline",
-        Amount: 1,
-        PartyA: "254715390163",
+        Amount: req.body.Amount,
+        PartyA: req.body.PartyA,
         PartyB: "174379",
-        PhoneNumber: "254715390163",
+        PhoneNumber: req.body.PhoneNumber,
         CallBackURL: "https://192.168.0.107:8000/checkout/",
         AccountReference: "Test",
         TransactionDesc: "TestPay",

@@ -4,6 +4,10 @@ const getProducts = () => {
   return db("products");
 };
 
+const getProductById = (id) => {
+  return db("products").returning("*").where(id, "product.id");
+};
+
 const addProduct = (product) => {
   return db("products").returning("*").insert({
     product_name: product.product_name,
@@ -17,10 +21,18 @@ const updateProduct = (product) => {
     product_name: product.product_name,
     price: product.price,
     category: product.category,
-    quantity: product.quantity
+    quantity: product.quantity,
   });
 };
 
-const deleteProduct = () => {};
+const deleteProduct = (id) => {
+  return db("products").where(id, "product.id").delete();
+};
 
-module.exports = { getProducts, addProduct, updateProduct, deleteProduct };
+module.exports = {
+  getProducts,
+  getProductById,
+  addProduct,
+  updateProduct,
+  deleteProduct,
+};
