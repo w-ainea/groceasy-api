@@ -14,7 +14,7 @@ router.post("/stk", authenticate, (req, res, next) => {
     timestamp =
       date.getFullYear() +
       "" +
-       ""+
+      "" +
       date.getMonth() +
       "" +
       "" +
@@ -29,7 +29,7 @@ router.post("/stk", authenticate, (req, res, next) => {
       "" +
       date.getSeconds();
 
-      console.log(timestamp)
+  console.log(timestamp);
 
   const password = new Buffer.from(
     "174379" +

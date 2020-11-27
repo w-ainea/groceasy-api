@@ -1,5 +1,12 @@
 const knex = require("knex");
 
-const config = require("./knexfile.js");
+const config = knex({
+  client: "postgresql",
+  connection: {
+    database: "groceasy",
+    user: "postgres",
+    password: "5432",
+  },
+});
 
-module.exports = knex(config.development);
+module.exports = config;

@@ -3,17 +3,20 @@ const bodyParser = require("body-parser");
 
 const jsonParser = bodyParser.json();
 
+const db = require("../../db-config.js");
+
 const {
   getProducts,
   addProduct,
   updateProduct,
   deleteProduct,
+  imageUpload,
 } = require("../actions/products.js");
 
 const router = express.Router();
 
 router.get("/", (req, res) => {
-  res.send("products endpoint");
+  return db("products").then((data) => res.json(data));
 });
 
 // get the products
@@ -45,7 +48,7 @@ router.delete("/delete", (req, res, next) => {
   const { id } = req.body.product.id;
   return getProductById(id).then((product) => {
     if (product) {
-      console.log(product)
+      console.log(product);
       deleteProduct(product)
         .then(() => res.json({ msg: "product deleted successfully" }))
         .catch((err) => {
@@ -56,6 +59,12 @@ router.delete("/delete", (req, res, next) => {
       res.status(404).send({ message: "product not found" });
     }
   });
+});
+
+router.post("/image-upload", (req, res) => {
+  return imageUpload(req.body.image)
+    .then((data) => res.json(data))
+    .catch((err) => res.send(err));
 });
 
 module.exports = router;

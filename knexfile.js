@@ -1,10 +1,12 @@
+// Update with your config settings.
+
 module.exports = {
   development: {
     client: "postgresql",
     connection: {
       database: "groceasy-db",
-      user: "",
-      password: "",
+      user: "postgres",
+      password: "5432",
     },
     pool: {
       min: 2,
