@@ -6,7 +6,7 @@ GET  http://localhost:8000/products/list
 GET http://localhost:8000/sellers/list
 
 ###
-POST http://localhost:8000/checkout/stk
+POST http://localhost:8000/products/image-upload
 
 
 Content-Type: application/json

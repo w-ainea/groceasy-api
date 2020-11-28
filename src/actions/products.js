@@ -1,13 +1,14 @@
+const { response } = require("express");
 const db = require("../../db-config.js");
 
 const cloudinary = require("cloudinary").v2;
 require("dotenv").config();
 
-cloudinary.config = {
+cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
-};
+});
 
 const getProducts = () => {
   return db("products");
@@ -38,29 +39,24 @@ const deleteProduct = (id) => {
   return db("products").where(id, "product.id").delete();
 };
 
-const imageUpload = (image) => {
+const imageUpload = (image, title) => {
   const data = {
     image,
+    title,
   };
-
-  console.log(data);
 
   cloudinary.uploader
     .upload(data.image)
-    .then((result) => {
-      response.status(200).send({
-        message: "success",
-        result,
+    .then((image) => {
+      return db("images").returning("*").insert({
+        title: image.title,
+        cloudinary_id: image.public_id,
+        img_url: image.secure_url,
       });
     })
-    .catch((error) => {
-      response.status(500).send({
-        message: "failure",
-        error,
-      });
+    .catch((err) => {
+      console.log({ message: "upload failed", err });
     });
-
-  console.log("working");
 };
 
 module.exports = {
