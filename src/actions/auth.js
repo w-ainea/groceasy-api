@@ -1,5 +1,15 @@
 const db = require("../../db-config");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const redis = require("redis");
+
+// redis client
+const redisClient = redis.createClient();
+
+// get user by id
+const getUserById = (id) => {
+  return db("users").where("id", "=", id);
+};
 
 // sign up
 const signUp = async (creds) => {
@@ -74,4 +84,47 @@ const signIn = async (creds) => {
   }
 };
 
-module.exports = { signIn, signUp };
+// function to store the toekn in redis database
+const setToken = (key, value) => {
+  return Promise.resolve(redisClient.set(key, value));
+};
+
+// retrieve token from redis database
+const getAuthToken = (authorization) => {
+  redisClient.get(authorization, (err, reply) => {
+    if (err || !reply) {
+      return { message: "unauthorised" };
+    } else {
+      console.log({ id: reply });
+    }
+  });
+};
+
+const signToken = (email) => {
+  const jwtPayload = { email };
+  return jwt.sign(jwtPayload, process.env.JWT_SECRET);
+};
+
+const createUserSession = (user) => {
+  const { email, id } = user;
+  const token = signToken(email);
+  return setToken(token, id)
+    .then(() => {
+      return { success: true, id, token };
+    })
+    .catch(console.log());
+};
+
+const signInAuthentication = (creds, authorization) => {
+  return authorization
+    ? getAuthToken(authorization)
+    : signIn(creds)
+        .then((data) =>
+          data.email && data.id ? createUserSession(data) : Promise.reject(data)
+        )
+        .then((session) => {
+          return session;
+        });
+};
+
+module.exports = { signIn, signUp, signInAuthentication, getUserById };
