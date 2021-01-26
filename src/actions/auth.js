@@ -90,13 +90,13 @@ const setToken = (key, value) => {
 };
 
 // retrieve token from redis database
-const getAuthToken = (authorization) => {
-  redisClient.get(authorization, (err, reply) => {
-    if (err || !reply) {
-      return { message: "unauthorised" };
-    } else {
-      console.log({ id: reply });
-    }
+const getRedisSessionData = (redisClient, authorization) => {
+  return new Promise((resolve, reject) => {
+    redisClient.get(authorization, (err, reply) => {
+      if (err) reject(err);
+
+      resolve({ id: reply });
+    });
   });
 };
 
@@ -115,16 +115,17 @@ const createUserSession = (user) => {
     .catch(console.log());
 };
 
-const signInAuthentication = (creds, authorization) => {
+const signInAuthentication = (credentials, authorization) => {
   return authorization
-    ? getAuthToken(authorization)
-    : signIn(creds)
+    ? getRedisSessionData(redisClient, authorization)
+    : signIn(credentials)
         .then((data) =>
           data.email && data.id ? createUserSession(data) : Promise.reject(data)
         )
         .then((session) => {
           return session;
-        });
+        })
+        .catch((err) => console.log(err));
 };
 
 module.exports = { signIn, signUp, signInAuthentication, getUserById };
