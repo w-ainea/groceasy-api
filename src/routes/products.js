@@ -1,16 +1,15 @@
 const express = require("express");
-const bodyParser = require("body-parser");
-
-const jsonParser = bodyParser.json();
+const multer = require("multer");
 
 const db = require("../../db-config.js");
+const upload = multer();
 
 const {
   getProducts,
   addProduct,
   updateProduct,
   deleteProduct,
-  imageUpload,
+  getProductById,
 } = require("../actions/products.js");
 
 const router = express.Router();
@@ -26,15 +25,23 @@ router.get("/list", (req, res, next) => {
     .catch((err) => next(err));
 });
 
+router.get("/list/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    let response = await getProductById(id);
+    res.json({ response });
+  } catch (error) {
+    res.status(400).json({ error, message: "couldn't retrieve item" });
+  }
+});
+
 // add products
-router.post("/add", jsonParser, (req, res, next) => {
-  return addProduct(req.body)
-    .then((response) => {
-      res.json(response);
-    })
-    .catch((err) => {
-      next(err);
-    });
+router.post("/add", upload.single("image"), (req, res, next) => {
+  return addProduct(req.file, req.body)
+    .then((result) => res.json({ result }))
+    .catch((err) =>
+      res.status(400).json({ err, message: "unable to add product" })
+    );
 });
 
 // update products
@@ -44,41 +51,15 @@ router.put("/update", (req, res, next) => {
     .catch((err) => next(err));
 });
 
-router.delete("/delete", (req, res, next) => {
-  const { id } = req.body.product.id;
-  return getProductById(id).then((product) => {
-    if (product) {
-      console.log(product);
-      deleteProduct(product)
-        .then(() => res.json({ msg: "product deleted successfully" }))
-        .catch((err) => {
-          // res.status(400).json("Could not delete product");
-          console.log(err);
-        });
-    } else {
-      res.status(404).send({ message: "product not found" });
-    }
-  });
-});
-
-router.post("/image-upload", (req, res) => {
-  const { image } = req.body;
-
-  return imageUpload(image)
-    .then((result) => {
-      res.status(201).send({
-        status: "success",
-        data: {
-          message: "Image uploaded successfully",
-          title: result.title,
-          cloudinary_id: result.cloudinary_id,
-          img_url: result.image_url,
-        },
-      });
-    })
-    .catch((err) => {
-      res.status(500).send("upload failed", err);
-    });
+router.delete("/delete/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    let deleteResponse = await deleteProduct(id);
+    console.log(deleteResponse);
+    res.send(deleteResponse);
+  } catch (error) {
+    res.status(400).json({ error, message: "could not delete product" });
+  }
 });
 
 module.exports = router;

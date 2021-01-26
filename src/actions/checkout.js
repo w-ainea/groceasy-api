@@ -22,7 +22,6 @@ const authenticate = (req, res, next) => {
       if (error) {
         console.log(error);
       } else {
-        
         req.access_token = JSON.parse(body).access_token;
         next();
       }

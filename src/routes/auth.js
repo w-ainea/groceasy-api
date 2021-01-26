@@ -1,40 +1,19 @@
 const express = require("express");
-const checkJwt = require("../actions/auth");
-const checkScopes = require("../actions/auth");
+const { signIn, signUp } = require("../actions/auth");
 
 const router = express.Router();
 
-router.get("/api/public", function (req, res) {
-  res.json({
-    message:
-      "Hello from a public endpoint! You don't need to be authenticated to access this endpoint",
-  });
+// signup a user
+router.post("/signup", async (req, res) => {
+  const response = await signUp(req.body);
+  // console.log(response);
+  res.json({ response });
 });
 
-router.get("/api/private", checkJwt, function (req, res) {
-  res.json({
-    message: "Hello from a private endpoint! You need authentication",
-  });
+router.post("/signin", async (req, res) => {
+  const response = await signIn(req.body);
+  console.log(response);
+  res.json({ response });
 });
-
-router.get("/api/private-scoped", checkJwt, checkScopes, function (req, res) {
-  res.json({
-    message:
-      "Hello from a private endpoint! You need to be authenticated and have a scope of read:messages to see this.",
-  });
-});
-
-/* router.post("/", (req, res) => {
-  res.send("Home page");
-});
-
-router.post("/register", (req, res) => {
-  console.log(req.body);
-  res.send("Register");
-});
-
-router.post("/login", (req, res) => {
-  res.send("Login");
-}); */
 
 module.exports = router;

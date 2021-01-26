@@ -7,29 +7,21 @@ const router = express.Router();
 
 const { authenticate } = require("../actions/checkout");
 
+const formatedDate = (n) => {
+  return n < 10 ? "0" + n : n;
+};
+
 router.post("/stk", authenticate, (req, res, next) => {
   let url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
     auth = "Bearer " + req.access_token,
     date = new Date(),
     timestamp =
       date.getFullYear() +
-      "" +
-      "" +
-      date.getMonth() +
-      "" +
-      "" +
-      date.getDate() +
-      "" +
-      "0" +
-      date.getHours() +
-      "" +
-      "" +
-      date.getMinutes() +
-      "" +
-      "" +
-      date.getSeconds();
-
-  console.log(timestamp);
+      formatedDate(date.getMonth() + 1) +
+      formatedDate(date.getDate()) +
+      formatedDate(date.getHours()) +
+      formatedDate(date.getMinutes()) +
+      formatedDate(date.getSeconds());
 
   const password = new Buffer.from(
     "174379" +
@@ -63,12 +55,13 @@ router.post("/stk", authenticate, (req, res, next) => {
         console.log(error);
       } else {
         res.status(200).json(body);
+        console.log(body);
         return body.CustomerMessage;
       }
     }
   );
 
-  console.log(req.body);
+  // console.log(req.body);
 });
 
 module.exports = router;

@@ -9,7 +9,7 @@ const app = express();
 const port = process.env.API_PORT || 8000;
 const appOrigin = process.env.APP_ORIGIN;
 
-// moddlewares
+// middlewares
 let jsonParser = bodyParser.json();
 let urlencodedParser = bodyParser.urlencoded({ extended: true });
 

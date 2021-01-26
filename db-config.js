@@ -4,7 +4,7 @@ const config = knex({
   client: "postgresql",
   connection: {
     database: "groceasy",
-    user: "postgres",
+    user: "ainea",
     password: "5432",
   },
 });
