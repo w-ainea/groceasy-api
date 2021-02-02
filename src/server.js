@@ -13,7 +13,7 @@ const appOrigin = process.env.APP_ORIGIN;
 let jsonParser = bodyParser.json();
 let urlencodedParser = bodyParser.urlencoded({ extended: true });
 
-app.use(jsonParser);
+app.use(bodyParser.json());
 app.use(urlencodedParser);
 
 app.use(cors({ origin: appOrigin }));

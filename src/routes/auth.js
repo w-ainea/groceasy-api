@@ -1,9 +1,10 @@
 const express = require("express");
 const {
-  signIn,
   signUp,
-  signInAuthentication,
+  // signInAuthentication,
   getUserById,
+
+  signInAuthentication,
 } = require("../actions/auth");
 
 const router = express.Router();
@@ -12,6 +13,7 @@ router.get("/user/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const user = await getUserById(id);
+
     res.json(user);
   } catch (error) {
     res.status(400).json({ message: "unable to retrieve user" });

@@ -16,6 +16,7 @@ const getProductById = async (id) => {
   return db("products").returning("*").where("id", "=", id);
 };
 
+// upload the product image
 const imageUpload = async (image) => {
   try {
     const file64 = dataUri(image);
@@ -32,6 +33,7 @@ const imageUpload = async (image) => {
   }
 };
 
+// add product to the database
 const addProduct = async (image, product) => {
   const file64 = dataUri(image);
   const uploadResponse = await cloudinaryUpload(file64.content);
