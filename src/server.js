@@ -1,5 +1,5 @@
 const express = require("express");
-const bodyParser = require("body-parser");
+
 const cors = require("cors");
 
 const routes = require("./routes");
@@ -10,11 +10,8 @@ const port = process.env.API_PORT || 8000;
 const appOrigin = process.env.APP_ORIGIN;
 
 // middlewares
-let jsonParser = bodyParser.json();
-let urlencodedParser = bodyParser.urlencoded({ extended: true });
 
-app.use(bodyParser.json());
-app.use(urlencodedParser);
+app.use(express.json());
 
 app.use(cors({ origin: appOrigin }));
 
