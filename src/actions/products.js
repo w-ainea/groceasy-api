@@ -1,6 +1,7 @@
 const db = require("../../db-config.js");
 const { cloudinaryUpload } = require("../middleware/cloudinary.js");
 const { dataUri } = require("../middleware/datauri.js");
+const { getUserById } = require("./users");
 
 const getProducts = () => {
   return db("products");
@@ -33,10 +34,22 @@ const imageUpload = async (image) => {
   }
 };
 
+const addProductToUser = async (id) => {
+  const user = await getUserById(id);
+  const newUser = await user.increment("products", 1);
+  console.log(newUser);
+  return newUser;
+};
+
 // add product to the database
 const addProduct = async (image, product) => {
   const file64 = dataUri(image);
   const uploadResponse = await cloudinaryUpload(file64.content);
+
+  const updateUser = await db("users")
+    .select("*")
+    .where("id", product.user_id)
+    .increment("products", 1);
 
   db.transaction((trx) => {
     trx
@@ -52,6 +65,7 @@ const addProduct = async (image, product) => {
           price: product.price,
           category: product.category,
           quantity: product.quantity,
+          user_id: product.user_id,
         });
       })
       .then(trx.commit)
@@ -71,6 +85,11 @@ const updateProduct = (product) => {
 const deleteProduct = async (id) => {
   try {
     const product = await db("products").where("id", id).del();
+    await db("users")
+      .select("*")
+      .where("id", "=", product.user_id)
+      .decrement(products, 1);
+
     if (product) {
       let db = await getProducts();
       return db;

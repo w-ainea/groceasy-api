@@ -37,7 +37,6 @@ router.get("/list/:id", async (req, res) => {
 
 // add products
 router.post("/add", upload.single("image"), (req, res, next) => {
-  console.log(req.body);
   return addProduct(req.file, req.body)
     .then((result) => res.json({ result }))
     .catch((err) =>
