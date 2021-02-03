@@ -6,6 +6,11 @@ const redis = require("redis");
 // redis client
 const redisClient = redis.createClient();
 
+// get all users
+const getUsers = () => {
+  return db("users");
+};
+
 // get user by id
 const getUserById = (id) => {
   return db("users").where("id", "=", id);
@@ -47,7 +52,7 @@ const signUp = async (creds) => {
     });
     return response;
   } catch (err) {
-    console.log(err);
+    throw err;
   }
 };
 
@@ -128,4 +133,10 @@ const signInAuthentication = (credentials, authorization) => {
         .catch((err) => console.log(err));
 };
 
-module.exports = { signIn, signUp, signInAuthentication, getUserById };
+module.exports = {
+  signIn,
+  signUp,
+  signInAuthentication,
+  getUserById,
+  getUsers,
+};

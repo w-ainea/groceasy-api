@@ -1,14 +1,13 @@
 const express = require("express");
 const {
   signUp,
-  // signInAuthentication,
   getUserById,
-
   signInAuthentication,
 } = require("../actions/auth");
 
 const router = express.Router();
 
+// get user by id
 router.get("/user/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -22,8 +21,12 @@ router.get("/user/:id", async (req, res) => {
 
 // signup a user
 router.post("/signup", async (req, res) => {
-  const response = await signUp(req.body);
-  res.json({ response });
+  try {
+    const response = await signUp(req.body);
+    res.json({ response });
+  } catch (error) {
+    res.status(400).send(error);
+  }
 });
 
 router.post("/signin", async (req, res) => {
