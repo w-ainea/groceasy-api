@@ -1,7 +1,9 @@
 const express = require("express");
+const multer = require("multer");
 const { getCategories, addCategory } = require("../actions/categories");
 
 const router = express.Router();
+const upload = multer();
 
 router.get("/", (req, res) => {
   res.send("categories");
@@ -13,8 +15,8 @@ router.get("/list", (req, res, next) => {
     .catch((err) => next(err));
 });
 
-router.post("/add", (req, res, next) => {
-  addCategory(req.body)
+router.post("/add", upload.single("image"), (req, res, next) => {
+  addCategory(req.file, req.body)
     .then((response) => {
       res.json(response);
     })
