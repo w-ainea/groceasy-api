@@ -30,10 +30,13 @@ router.post("/signup", async (req, res) => {
 });
 
 router.post("/signin", async (req, res) => {
-  const { authorization } = req.headers;
-  const response = await signInAuthentication(req.body, authorization);
-
-  res.json({ response });
+  try {
+    const { authorization } = req.headers;
+    const response = await signInAuthentication(req.body, authorization);
+    res.json({ response });
+  } catch (error) {
+    res.status(400).json({ error });
+  }
 });
 
 module.exports = router;

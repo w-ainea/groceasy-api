@@ -19,6 +19,7 @@ const getUserById = (id) => {
 // sign up
 const signUp = async (creds) => {
   try {
+    //destructuring
     const { username, email, password } = creds;
 
     // use bcrypt to hash the password
@@ -67,7 +68,7 @@ const signIn = async (creds) => {
       .where("email", "=", email)
       .then((data) => {
         const isValid = bcrypt.compareSync(password, data[0].hash);
-
+        console.log(isValid);
         if (isValid) {
           return db
             .select("*")
@@ -117,7 +118,7 @@ const createUserSession = (user) => {
     .then(() => {
       return { success: true, id, token };
     })
-    .catch(console.log());
+    .catch((err) => console.log("error" + err));
 };
 
 const signInAuthentication = (credentials, authorization) => {

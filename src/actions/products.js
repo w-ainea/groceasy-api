@@ -46,7 +46,7 @@ const addProduct = async (image, product) => {
   const file64 = dataUri(image);
   const uploadResponse = await cloudinaryUpload(file64.content);
 
-  const updateUser = await db("users")
+  await db("users")
     .select("*")
     .where("id", product.user_id)
     .increment("products", 1);
