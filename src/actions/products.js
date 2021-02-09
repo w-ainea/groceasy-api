@@ -20,8 +20,10 @@ const getProductById = async (id) => {
 // upload the product image
 const imageUpload = async (image) => {
   try {
+    // use datauri to upload the image as a uri
     const file64 = dataUri(image);
     const uploadResponse = await cloudinaryUpload(file64.content);
+    // update the images table after upload is successful
     const dbResult = await db("images").returning("*").insert({
       title: uploadResponse.public_id,
       cloudinary_id: uploadResponse.secure_url,
@@ -46,6 +48,7 @@ const addProduct = async (image, product) => {
   const file64 = dataUri(image);
   const uploadResponse = await cloudinaryUpload(file64.content);
 
+  // increase the number of products of a user
   await db("users")
     .select("*")
     .where("id", product.user_id)
@@ -73,6 +76,7 @@ const addProduct = async (image, product) => {
   }).catch((err) => console.log(err));
 };
 
+// update
 const updateProduct = (product) => {
   return db("products").update({
     product_name: product.product_name,
@@ -82,18 +86,18 @@ const updateProduct = (product) => {
   });
 };
 
+// delete
 const deleteProduct = async (id) => {
   try {
+    // find product by id, in the database, and delete
     const product = await db("products").where("id", id).del();
-    await db("users")
-      .select("*")
-      .where("id", "=", product.user_id)
-      .decrement(products, 1);
 
     if (product) {
+      // successful deletion
       let db = await getProducts();
       return db;
     } else {
+      // unsuccessful deletion
       let response = "could not delete product";
       return response;
     }

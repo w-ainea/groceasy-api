@@ -11,6 +11,7 @@ const formatedDate = (n) => {
   return n < 10 ? "0" + n : n;
 };
 
+// initiate an STK push to the customer's phone
 router.post("/stk", authenticate, (req, res, next) => {
   let url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
     auth = "Bearer " + req.access_token,
@@ -29,6 +30,7 @@ router.post("/stk", authenticate, (req, res, next) => {
       timestamp
   ).toString("base64");
 
+  // the actual request sent to Safaricon servers in order to authorize payment
   request(
     {
       url: url,
@@ -50,18 +52,20 @@ router.post("/stk", authenticate, (req, res, next) => {
         TransactionDesc: "TestPay",
       },
     },
+
+    // this callback function runs once the request is complete
     function (error, response, body) {
+      // throw an error, if therethe request fails
       if (error) {
         console.log(error);
       } else {
+        // otherwise return a success message if the request is successful
         res.status(200).json(body);
         console.log(body);
         return body.CustomerMessage;
       }
     }
   );
-
-  // console.log(req.body);
 });
 
 module.exports = router;

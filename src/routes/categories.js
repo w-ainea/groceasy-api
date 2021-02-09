@@ -9,10 +9,17 @@ router.get("/", (req, res) => {
   res.send("categories");
 });
 
-router.get("/list", (req, res, next) => {
-  return getCategories()
-    .then((category) => res.json(category))
-    .catch((err) => next(err));
+// endpoint for getting the list of products
+router.get("/list", async (req, res, next) => {
+  try {
+    // make an asynchronous call to the database to fetch the products and send them to the server
+    const categories = await getCategories();
+    res.json({ categories });
+  } catch (error) {
+    // in case there's an error, respond with the error
+    res.status(400).json({ err });
+    next(err);
+  }
 });
 
 router.post("/add", upload.single("image"), (req, res, next) => {

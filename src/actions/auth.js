@@ -61,14 +61,14 @@ const signUp = async (creds) => {
 const signIn = async (creds) => {
   try {
     const { email, password } = creds;
-
+    // compare the hash of the submitted password, with the hash stored in the database
     const response = db
       .select("email", "hash")
       .from("register")
       .where("email", "=", email)
       .then((data) => {
         const isValid = bcrypt.compareSync(password, data[0].hash);
-        console.log(isValid);
+        // if the hashes match, return the user
         if (isValid) {
           return db
             .select("*")
@@ -81,6 +81,7 @@ const signIn = async (creds) => {
               throw err;
             });
         } else {
+          // if the hashes don't match, respond with this error message
           return { message: "wrong credentials" };
         }
       });
