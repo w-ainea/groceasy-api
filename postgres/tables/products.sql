@@ -1,0 +1,13 @@
+BEGIN TRANSACTION;
+
+CREATE TABLE products(
+  id SERIAL PRIMARY KEY,
+  product_name VARCHAR(128) NOT NULL,
+  price FLOAT NOT NULL,
+  category VARCHAR(30) NOT NULL,
+  quantity INT NOT NULL, 
+  imgurl VARCHAR(128) NOT NULL,
+  user_id INT NOT NULL
+);
+
+COMMIT;

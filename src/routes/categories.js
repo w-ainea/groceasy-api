@@ -17,7 +17,7 @@ router.get("/list", async (req, res, next) => {
     res.json({ categories });
   } catch (error) {
     // in case there's an error, respond with the error
-    res.status(400).json({ err });
+    res.status(400).json({ error });
     next(err);
   }
 });

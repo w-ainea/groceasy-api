@@ -2,9 +2,10 @@ const db = require("../../db-config");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const redis = require("redis");
+require("dotenv").config();
 
 // redis client
-const redisClient = redis.createClient();
+const redisClient = redis.createClient(process.env.REDIS_URI);
 
 // get all users
 const getUsers = () => {
