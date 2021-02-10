@@ -17,6 +17,7 @@ services:
       - "8000:8000"
     volumes:
       - ./:/usr/src/groceasy-api
+      - /usr/src/groceasy-api/node_modules
 
   # POSTGRES
   postgres:
